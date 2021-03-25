@@ -1,9 +1,13 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,13 +24,12 @@ namespace Business.Concrete
             
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
+        //add metodunu ProductValidator ile doğrula demek.
         public IResult Add(Product product)
         {
-            //business code. Ekleyecegimiz product için kural varsa kurallar kontrolü
-            if (product.ProductName.Length<2)
-            {
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
+            //business kodu ayrı validation kodu ayrı olmalı.
+            //business codes
 
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
